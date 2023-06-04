@@ -24,7 +24,7 @@ dependencies {
     implementation(libs.kotlin.datetime)
 
     testImplementation(libs.kotlin.junit)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation(libs.kotlin.coroutines.test)
 }
 
 fun <T : KotlinJvmOptions> KotlinCompile<T>.applyKotlinJvmOptions() {

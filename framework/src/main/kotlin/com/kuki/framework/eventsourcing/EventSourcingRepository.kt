@@ -8,12 +8,25 @@ import com.kuki.framework.repository.Repository
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
+/**
+ * EventSourcingRepository is a wrapper around the EventStore and EventBus.
+ * It is responsible for loading and saving aggregates.
+ *
+ * @property eventBus  The event bus.
+ * @property eventStore The event store.
+ * @property aggregateKlass The aggregate class.
+ */
 open class EventSourcingRepository(
     private val eventBus: EventBus,
     private val eventStore: EventStore,
     private val aggregateKlass: KClass<out AggregateRoot>,
 ) : Repository {
 
+    /**
+     * Loads an aggregate from the event store.
+     * @param aggregateIdentifier The aggregate identifier.
+     * @return The aggregate.
+     */
     override suspend fun load(aggregateIdentifier: String): AggregateRoot {
         try {
             val events = eventStore.load(aggregateIdentifier)
@@ -27,6 +40,10 @@ open class EventSourcingRepository(
         }
     }
 
+    /**
+     * Saves an aggregate to the event store.
+     * @param aggregate The aggregate.
+     */
     override suspend fun save(aggregate: AggregateRoot) {
         val domainEvents = aggregate.domainEvents()
 

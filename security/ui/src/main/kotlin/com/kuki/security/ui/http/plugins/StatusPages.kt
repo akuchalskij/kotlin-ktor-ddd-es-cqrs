@@ -1,5 +1,6 @@
 package com.kuki.security.ui.http.plugins
 
+import com.kuki.framework.eventstore.EventStoreException
 import com.kuki.security.domain.exception.InvalidCredentialsException
 import com.kuki.security.ui.http.models.output.ProblemDetail
 import io.ktor.http.*
@@ -25,7 +26,8 @@ fun Application.configureStatusPages() {
                     HttpStatusCode.BadRequest
                 )
 
-                is IllegalStateException -> Pair(
+                is IllegalStateException,
+                is EventStoreException.DuplicateVersionException -> Pair(
                     ProblemDetail(
                         type = cause::class.simpleName.toString(),
                         title = "Conflict",

@@ -39,6 +39,7 @@ application {
 
 dependencies {
     implementation(project(":framework"))
+    implementation(project(":shared"))
     implementation(project(":security:infrastructure"))
     implementation(project(":security:application"))
     implementation(project(":security:domain"))

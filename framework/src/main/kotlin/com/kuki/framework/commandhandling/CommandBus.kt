@@ -2,7 +2,13 @@ package com.kuki.framework.commandhandling
 
 interface CommandBus {
 
-    fun subscribe(listener: CommandListener<Command>)
+    /**
+     * Subscribe a command handler to the bus
+     */
+    fun subscribe(listener: CommandHandler<Command>)
 
+    /**
+     * Dispatch a command to the bus
+     */
     suspend fun dispatch(command: Command)
 }

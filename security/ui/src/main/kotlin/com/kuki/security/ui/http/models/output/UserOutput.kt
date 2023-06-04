@@ -9,8 +9,6 @@ data class UserOutput(
 
     val email: String,
 
-    val password: String,
-
     val isEmailVerified: Boolean,
 
     val firstName: String?,
@@ -25,7 +23,6 @@ data class UserOutput(
 fun UserView.serialize() = UserOutput(
     id,
     email,
-    password,
     isEmailVerified,
     firstName,
     lastName,

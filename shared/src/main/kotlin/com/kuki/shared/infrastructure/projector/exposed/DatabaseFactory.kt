@@ -1,13 +1,13 @@
-package com.kuki.security.infrastructure.projector.exposed
+package com.kuki.shared.infrastructure.projector.exposed
 
-import com.kuki.security.infrastructure.eventstore.exposed.DomainMessagesTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
 
-    fun init(config: DatabaseConfig) {
+    fun init(config: DatabaseConfig, vararg tables: Table) {
         val database = Database.connect(
             driver = config.driver,
             url = config.url,
@@ -16,7 +16,7 @@ object DatabaseFactory {
         )
 
         transaction(database) {
-            SchemaUtils.create(DomainMessagesTable, UsersTable)
+            SchemaUtils.create(*tables)
         }
     }
 

@@ -1,7 +1,9 @@
 package com.kuki.framework.commandhandling
 
+import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertIs
 
 class SimpleCommandBusTest {
 
@@ -13,10 +15,20 @@ class SimpleCommandBusTest {
     }
 
     @Test
-    fun subscribe() {
+    fun `should subscribe and execute received commands`() {
+        val commandHandler = object : CommandHandler<Command> {
+            override suspend fun execute(command: Command) {
+                assertIs<ExampleCommand>(command)
+            }
+        }
+
+        commandBus.subscribe(commandHandler)
+
+        runTest {
+            commandBus.dispatch(ExampleCommand("test"))
+        }
     }
 
-    @Test
-    fun dispatch() {
-    }
+
+    data class ExampleCommand(val id: String) : Command
 }
