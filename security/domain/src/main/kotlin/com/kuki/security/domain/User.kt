@@ -4,6 +4,7 @@ import com.kuki.framework.domain.AggregateId
 import com.kuki.framework.domain.AggregateRoot
 import com.kuki.framework.eventsourcing.EventSourcingHandler
 import com.kuki.security.domain.event.UserEmailChanged
+import com.kuki.security.domain.event.UserPasswordChanged
 import com.kuki.security.domain.event.UserSignedIn
 import com.kuki.security.domain.event.UserWasCreated
 import com.kuki.security.domain.exception.InvalidCredentialsException
@@ -52,6 +53,14 @@ class User : AggregateRoot() {
         }
 
         throw InvalidCredentialsException("Invalid credentials")
+    }
+
+    fun changePassword(newPassword: HashedPassword) {
+        check(this.password != newPassword) {
+            "New password should be different"
+        }
+
+        apply(UserPasswordChanged(userId = id, newPassword = newPassword, updatedAt = Clock.System.now()))
     }
 
     @EventSourcingHandler

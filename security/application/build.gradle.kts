@@ -20,8 +20,11 @@ kotlin {
 dependencies {
     implementation(project(":framework"))
     implementation(project(":security:domain"))
+    implementation(project(":security:infrastructure"))
 
     implementation(libs.logback)
+
+    implementation(libs.koin.core)
 
     testImplementation(libs.kotlin.junit)
 }

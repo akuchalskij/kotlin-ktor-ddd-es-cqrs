@@ -1,6 +1,6 @@
 package com.kuki.security.application.command.handler
 
-import com.kuki.framework.commandhandling.CommandListener
+import com.kuki.framework.commandhandling.CommandHandler
 import com.kuki.security.application.command.api.SignInCommand
 import com.kuki.security.domain.exception.InvalidCredentialsException
 import com.kuki.security.domain.repository.CheckUserByEmailInterface
@@ -11,7 +11,7 @@ class SignInCommandHandler(
     private val userRepository: UserRepositoryInterface,
     private val checkUserByEmailInterface: CheckUserByEmailInterface,
     private val passwordEncryption: PasswordEncryption
-) : CommandListener<SignInCommand> {
+) : CommandHandler<SignInCommand> {
 
     override suspend fun execute(command: SignInCommand) {
         val userId = checkUserByEmailInterface.existsByEmail(command.email)

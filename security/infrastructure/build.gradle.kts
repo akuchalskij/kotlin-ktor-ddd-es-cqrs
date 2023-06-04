@@ -20,7 +20,7 @@ kotlin {
 
 dependencies {
     implementation(project(":framework"))
-    implementation(project(":security:application"))
+    implementation(project(":shared"))
     implementation(project(":security:domain"))
 
     implementation(libs.kotlin.coroutines)

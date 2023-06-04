@@ -1,6 +1,6 @@
 package com.kuki.framework.commandhandling
 
-interface CommandListener<T : Command> {
+interface CommandHandler<T : Command> {
 
     suspend fun execute(command: T)
 }

@@ -1,5 +1,6 @@
 package com.kuki.security.ui.http.plugins
 
+import com.kuki.security.application.koin.applicationModule
 import com.kuki.security.infrastructure.koin.infrastructureModule
 import com.kuki.security.ui.http.koin.httpModule
 import io.ktor.server.application.*
@@ -11,6 +12,7 @@ fun Application.configureKoin() {
         slf4jLogger()
         modules(
             httpModule(this@configureKoin),
+            applicationModule,
             infrastructureModule
         )
     }

@@ -1,8 +1,8 @@
-package com.kuki.security.infrastructure.eventstore.exposed
+package com.kuki.shared.infrastructure.eventstore.exposed
 
 import com.kuki.framework.domain.Event
-import com.kuki.security.infrastructure.koin.jsonSerializer
-import com.kuki.security.infrastructure.util.exposed.json
+import com.kuki.shared.infrastructure.util.exposed.json
+import com.kuki.shared.infrastructure.serialization.jsonSerializer
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 

@@ -1,17 +1,16 @@
 package com.kuki.security.infrastructure.projector.exposed
 
+import com.kuki.framework.projector.ProjectionException
 import com.kuki.security.domain.repository.CheckUserByEmailInterface
 import com.kuki.security.domain.valueobject.Email
 import com.kuki.security.domain.valueobject.UserId
-import com.kuki.framework.projector.ProjectionException
 import com.kuki.security.infrastructure.projector.UserView
 import com.kuki.security.infrastructure.projector.UserViewRepository
-import com.kuki.security.infrastructure.util.exposed.insertOrUpdate
-import kotlinx.coroutines.Dispatchers
+import com.kuki.shared.infrastructure.util.exposed.insertOrUpdate
+import com.kuki.shared.infrastructure.util.exposed.transaction
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface {
 
@@ -61,8 +60,6 @@ class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface 
             .limit(limit.toInt(), offset = offset)
             .map { row -> row.toUserView() }
     }
-
-    private suspend fun <T> transaction(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
 
     private fun ResultRow.toUserView() = UserView(
         this[UsersTable.id].toString(),

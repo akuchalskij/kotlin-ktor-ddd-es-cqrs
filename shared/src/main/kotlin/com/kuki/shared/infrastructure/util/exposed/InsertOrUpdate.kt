@@ -1,4 +1,4 @@
-package com.kuki.security.infrastructure.util.exposed
+package com.kuki.shared.infrastructure.util.exposed
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table

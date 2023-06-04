@@ -1,4 +1,4 @@
-package com.kuki.security.infrastructure.eventstore.exposed
+package com.kuki.shared.infrastructure.eventstore.exposed
 
 import com.kuki.framework.domain.DomainMessage
 import com.kuki.framework.eventstore.EventStore

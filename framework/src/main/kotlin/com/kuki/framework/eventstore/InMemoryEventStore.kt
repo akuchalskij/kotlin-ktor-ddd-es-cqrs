@@ -3,9 +3,12 @@ package com.kuki.framework.eventstore
 import com.kuki.framework.domain.DomainMessage
 import org.slf4j.LoggerFactory
 
+/**
+ * In-memory implementation of [EventStore].
+ */
 class InMemoryEventStore : EventStore {
 
-    private val events: MutableMap<String, List<DomainMessage>> = mutableMapOf()
+    private val events: HashMap<String, List<DomainMessage>> = hashMapOf()
 
     override suspend fun load(id: String): List<DomainMessage> {
         val eventStream = events.filter { event -> event.key == id }
