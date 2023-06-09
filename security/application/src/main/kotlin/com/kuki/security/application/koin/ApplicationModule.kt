@@ -3,6 +3,7 @@ package com.kuki.security.application.koin
 import com.kuki.framework.commandhandling.CommandHandler
 import com.kuki.framework.queryhandling.QueryHandler
 import com.kuki.security.application.command.handler.ChangeEmailCommandHandler
+import com.kuki.security.application.command.handler.ChangePasswordCommandHandler
 import com.kuki.security.application.command.handler.CreateUserCommandHandler
 import com.kuki.security.application.command.handler.SignInCommandHandler
 import com.kuki.security.application.query.handler.FindAllUsersHandler
@@ -35,6 +36,12 @@ val applicationModule = module {
     } bind CommandHandler::class
 
     single {
+        ChangePasswordCommandHandler(
+            userRepository = get()
+        )
+    } bind CommandHandler::class
+
+    single {
         FindAllUsersHandler(userViewRepository = get())
     } bind QueryHandler::class
 
@@ -45,5 +52,4 @@ val applicationModule = module {
     single {
         GetTokenHandler(userViewRepository = get(), tokenGenerator = get())
     } bind QueryHandler::class
-
 }

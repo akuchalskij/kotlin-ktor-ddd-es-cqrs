@@ -77,6 +77,12 @@ class User : AggregateRoot() {
         updatedAt = event.updatedAt
     }
 
+    @EventSourcingHandler
+    private fun on(event:  UserPasswordChanged) {
+        password = event.newPassword
+        updatedAt = event.updatedAt
+    }
+
     companion object {
 
         suspend fun create(

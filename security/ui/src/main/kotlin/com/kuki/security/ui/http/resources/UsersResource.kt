@@ -5,10 +5,13 @@ import io.ktor.resources.*
 @Resource("/users")
 class UsersResource(val limit: Long = 25, val offset: Long = 0) {
 
-    @Resource("{id}")
-    class User(val parent: UsersResource = UsersResource(), val id: String) {
+    @Resource("me")
+    class User(val parent: UsersResource = UsersResource()) {
 
         @Resource("change-email")
-        class ChangeEmail(val parent: User)
+        class ChangeEmail(val parent: User = User())
+
+        @Resource("change-password")
+        class ChangePassword(val parent: User = User())
     }
 }
