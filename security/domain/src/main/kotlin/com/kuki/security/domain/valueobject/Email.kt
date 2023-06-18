@@ -3,7 +3,7 @@ package com.kuki.security.domain.valueobject
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Email(private val email: String) {
+data class Email internal constructor(private val email: String) {
 
     override fun toString(): String {
         return email

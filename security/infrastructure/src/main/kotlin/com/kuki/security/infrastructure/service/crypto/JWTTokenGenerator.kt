@@ -1,4 +1,4 @@
-package com.kuki.security.ui.http.services
+package com.kuki.security.infrastructure.service.crypto
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

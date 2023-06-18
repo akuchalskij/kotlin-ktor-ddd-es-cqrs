@@ -2,9 +2,8 @@ package com.kuki.security.infrastructure.projector
 
 import com.kuki.framework.projector.EventHandler
 import com.kuki.framework.projector.Projector
-import com.kuki.security.domain.event.UserEmailChanged
-import com.kuki.security.domain.event.UserPasswordChanged
-import com.kuki.security.domain.event.UserWasCreated
+import com.kuki.security.domain.event.UserCreated
+import com.kuki.security.domain.event.UserResetPasswordConfirmed
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -13,7 +12,7 @@ class UserProjector(
 ) : Projector() {
 
     @EventHandler
-    suspend fun handle(event: UserWasCreated) {
+    suspend fun handle(event: UserCreated) {
         val view = UserView(
             id = event.id.toString(),
             email = event.email.toString(),
@@ -29,16 +28,7 @@ class UserProjector(
     }
 
     @EventHandler
-    suspend fun handle(event: UserEmailChanged) {
-        val user = repository.findById(event.userId.toString()).copy(
-            email = event.email.toString()
-        )
-
-        repository.save(user)
-    }
-
-    @EventHandler
-    suspend fun handle(event: UserPasswordChanged) {
+    suspend fun handle(event: UserResetPasswordConfirmed) {
         val user = repository.findById(event.userId.toString()).copy(
             password = event.newPassword.toString()
         )

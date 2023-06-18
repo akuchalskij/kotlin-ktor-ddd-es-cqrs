@@ -2,16 +2,12 @@ package com.kuki.security.ui.http.routes
 
 import com.kuki.framework.commandhandling.CommandBus
 import com.kuki.framework.queryhandling.QueryBus
-import com.kuki.security.application.command.api.ChangeEmailCommand
-import com.kuki.security.application.command.api.ChangePasswordCommand
-import com.kuki.security.application.command.api.CreateUserCommand
+import com.kuki.security.application.command.api.*
 import com.kuki.security.application.query.api.FindUserByIdQuery
 import com.kuki.security.domain.exception.InvalidCredentialsException
 import com.kuki.security.domain.service.crypto.PasswordEncryption
 import com.kuki.security.infrastructure.projector.UserView
-import com.kuki.security.ui.http.models.input.ChangeEmailInput
-import com.kuki.security.ui.http.models.input.ChangePasswordInput
-import com.kuki.security.ui.http.models.input.SignUpInput
+import com.kuki.security.ui.http.models.input.*
 import com.kuki.security.ui.http.models.output.serialize
 import com.kuki.security.ui.http.resources.UsersResource
 import io.ktor.http.*
@@ -50,6 +46,90 @@ fun Route.userRoutes() {
             call.respond(HttpStatusCode.OK, user.serialize())
         }
 
+        put<UsersResource.User> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            val request = call.receive<ChangePersonalNameInput>()
+
+            commandBus.dispatch(
+                ChangePersonalNameCommand(
+                    userId,
+                    request.givenName,
+                    request.middleName,
+                    request.surname
+                )
+            )
+
+            call.respond(HttpStatusCode.OK, request)
+        }
+
+        delete<UsersResource.User> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            commandBus.dispatch(DeleteUserCommand(userId))
+
+            call.respond(HttpStatusCode.NoContent)
+        }
+
+        post<UsersResource.User.SendActivate> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            val request = call.receive<SendActivateInput>()
+
+            commandBus.dispatch(SendActivationRequestCommand(userId, request.email))
+
+            call.respond(HttpStatusCode.OK, request)
+        }
+
+        post<UsersResource.User.Activate> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            val request = call.receive<ActivateInput>()
+
+            commandBus.dispatch(ActivateUserCommand(userId, request.token))
+
+            call.respond(HttpStatusCode.OK, request)
+        }
+
+        post<UsersResource.User.ResetPassword> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            val request = call.receive<ResetPasswordInput>()
+
+            commandBus.dispatch(RequestResetPasswordCommand(userId, request.email))
+
+            call.respond(HttpStatusCode.OK, request)
+        }
+
+        post<UsersResource.User.ResetPasswordConfirm> {
+            val userId = call.principal<JWTPrincipal>()
+                ?.subject
+                ?: throw InvalidCredentialsException("Subject not found")
+
+            val request = call.receive<ResetPasswordConfirmInput>()
+
+            commandBus.dispatch(
+                ConfirmResetPasswordCommand(
+                    userId,
+                    request.token,
+                    request.newPassword,
+                    passwordEncryption
+                )
+            )
+
+            call.respond(HttpStatusCode.OK, request)
+        }
+
         put<UsersResource.User.ChangeEmail> {
             val userId = call.principal<JWTPrincipal>()
                 ?.subject
@@ -57,7 +137,7 @@ fun Route.userRoutes() {
 
             val request = call.receive<ChangeEmailInput>()
 
-            commandBus.dispatch(ChangeEmailCommand(userId, request.email))
+            commandBus.dispatch(ChangeEmailCommand(userId, request.currentPassword, request.email))
 
             call.respond(HttpStatusCode.OK, request)
         }
@@ -69,7 +149,14 @@ fun Route.userRoutes() {
 
             val request = call.receive<ChangePasswordInput>()
 
-            commandBus.dispatch(ChangePasswordCommand(userId, request.newPassword, passwordEncryption))
+            commandBus.dispatch(
+                ChangePasswordCommand(
+                    userId,
+                    request.currentPassword,
+                    request.newPassword,
+                    passwordEncryption
+                )
+            )
 
             call.respond(HttpStatusCode.OK, request)
         }

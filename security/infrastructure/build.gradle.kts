@@ -26,12 +26,15 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.datetime)
+    implementation(libs.kreds)
 
     implementation(libs.koin.core)
 
     implementation(libs.postgresql)
+    implementation(libs.auth0.jwt)
 
     implementation(libs.bundles.exposed)
+    implementation(libs.bundles.kmongo)
 
     implementation(libs.logback)
 

@@ -14,13 +14,21 @@ import com.kuki.framework.queryhandling.QueryHandler
 import com.kuki.framework.queryhandling.SimpleQueryBus
 import com.kuki.security.domain.repository.CheckUserByEmailInterface
 import com.kuki.security.domain.repository.UserRepositoryInterface
+import com.kuki.security.domain.service.crypto.OTP
 import com.kuki.security.domain.service.crypto.PasswordEncryption
+import com.kuki.security.domain.service.sender.ActivationTokenSender
+import com.kuki.security.domain.service.sender.ResetPasswordConfirmationSender
 import com.kuki.security.domain.specification.UniqueEmailSpecificationInterface
 import com.kuki.security.infrastructure.projector.UserProjector
 import com.kuki.security.infrastructure.projector.UserViewRepository
 import com.kuki.security.infrastructure.projector.exposed.ExposedUserViewRepository
 import com.kuki.security.infrastructure.repository.UserEventStore
+import com.kuki.security.infrastructure.service.crypto.InMemoryOTPStorage
+import com.kuki.security.infrastructure.service.crypto.OTPImpl
+import com.kuki.security.infrastructure.service.crypto.OTPStorage
 import com.kuki.security.infrastructure.service.crypto.PBKDF2PasswordEncryption
+import com.kuki.security.infrastructure.service.sender.ActivationTokenConsoleSender
+import com.kuki.security.infrastructure.service.sender.ResetPasswordConfirmationConsoleSender
 import com.kuki.security.infrastructure.specification.UniqueEmailSpecification
 import com.kuki.shared.infrastructure.eventstore.exposed.ExposedEventStore
 import org.koin.dsl.bind
@@ -84,4 +92,11 @@ val infrastructureModule = module {
     single { UserEventStore(eventBus = get(), eventStore = get()) } bind UserRepositoryInterface::class
 
     single<UniqueEmailSpecificationInterface> { UniqueEmailSpecification(checkUserByEmailInterface = get()) }
+
+    single { InMemoryOTPStorage() } bind OTPStorage::class
+
+    single<OTP> { OTPImpl(storage = get()) }
+
+    single<ActivationTokenSender> { ActivationTokenConsoleSender() }
+    single<ResetPasswordConfirmationSender> { ResetPasswordConfirmationConsoleSender() }
 }

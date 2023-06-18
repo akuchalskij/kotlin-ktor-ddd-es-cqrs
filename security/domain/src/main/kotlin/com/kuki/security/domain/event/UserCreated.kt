@@ -8,7 +8,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserWasCreated(
+data class UserCreated(
     val id: UserId,
     val email: Email,
     val password: HashedPassword,

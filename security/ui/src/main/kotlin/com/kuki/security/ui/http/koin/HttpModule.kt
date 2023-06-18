@@ -1,7 +1,7 @@
 package com.kuki.security.ui.http.koin
 
 import com.kuki.security.domain.service.crypto.TokenGenerator
-import com.kuki.security.ui.http.services.JWTTokenGenerator
+import com.kuki.security.infrastructure.service.crypto.JWTTokenGenerator
 import io.ktor.server.application.*
 import kotlinx.coroutines.CoroutineScope
 import org.koin.dsl.module

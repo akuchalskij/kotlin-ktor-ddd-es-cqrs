@@ -1,4 +1,12 @@
 services:
+    mongodb:
+        image: mongo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: animalhouse
+            MONGO_INITDB_ROOT_PASSWORD: animalhousepass
+        ports:
+            - 27017:27017
+
     postgresql:
         image: postgres
         environment:
@@ -7,6 +15,12 @@ services:
             POSTGRES_PASSWORD: "animalhousepass"
         ports:
             - 5432:5432
+
+    redis:
+        image: redis
+        command: redis-server --requirepass animalhousepass
+        ports:
+            - 6379:6379
 
     prometheus:
         image: prom/prometheus

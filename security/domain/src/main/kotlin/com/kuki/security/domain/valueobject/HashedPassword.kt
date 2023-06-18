@@ -4,7 +4,7 @@ import com.kuki.security.domain.service.crypto.PasswordEncryption
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HashedPassword(private val hashedPassword: String) {
+data class HashedPassword internal constructor(private val hashedPassword: String) {
 
     fun isMatch(plainPassword: String, encryption: PasswordEncryption): Boolean {
         return encryption.isMatch(plainPassword, hashedPassword)

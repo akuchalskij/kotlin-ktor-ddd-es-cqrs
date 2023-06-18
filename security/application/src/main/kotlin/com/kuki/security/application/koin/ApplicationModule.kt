@@ -2,10 +2,7 @@ package com.kuki.security.application.koin
 
 import com.kuki.framework.commandhandling.CommandHandler
 import com.kuki.framework.queryhandling.QueryHandler
-import com.kuki.security.application.command.handler.ChangeEmailCommandHandler
-import com.kuki.security.application.command.handler.ChangePasswordCommandHandler
-import com.kuki.security.application.command.handler.CreateUserCommandHandler
-import com.kuki.security.application.command.handler.SignInCommandHandler
+import com.kuki.security.application.command.handler.*
 import com.kuki.security.application.query.handler.FindAllUsersHandler
 import com.kuki.security.application.query.handler.FindUserByIdHandler
 import com.kuki.security.application.query.handler.GetTokenHandler
@@ -32,12 +29,56 @@ val applicationModule = module {
         ChangeEmailCommandHandler(
             userRepository = get(),
             uniqueEmailSpecification = get(),
+            passwordEncryption = get(),
         )
     } bind CommandHandler::class
 
     single {
         ChangePasswordCommandHandler(
+            userRepository = get(),
+            passwordEncryption = get(),
+        )
+    } bind CommandHandler::class
+
+    single {
+        ActivateUserCommandHandler(
+            userRepository = get(),
+            otp = get()
+        )
+    } bind CommandHandler::class
+
+    single {
+        ChangePersonalNameCommandHandler(
             userRepository = get()
+        )
+    } bind CommandHandler::class
+
+    single {
+        ConfirmResetPasswordCommandHandler(
+            userRepository = get(),
+            otp = get()
+        )
+    } bind CommandHandler::class
+
+    single {
+        DeleteUserCommandHandler(
+            userRepository = get()
+        )
+    } bind CommandHandler::class
+
+    single {
+        RequestResetPasswordCommandHandler(
+            userRepository = get(),
+            resetPasswordConfirmationSender = get(),
+            otp = get()
+        )
+    } bind CommandHandler::class
+
+    single {
+        SendActivationRequestCommandHandler(
+            userRepository = get(),
+            activationTokenSender = get(),
+            otp = get()
         )
     } bind CommandHandler::class
 
