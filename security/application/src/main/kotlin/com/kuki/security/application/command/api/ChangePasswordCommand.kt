@@ -7,11 +7,13 @@ import com.kuki.security.domain.valueobject.UserId
 
 data class ChangePasswordCommand(
     val userId: UserId,
+    val currentPassword: String,
     val password: HashedPassword
 ) : Command {
 
-    constructor(uuid: String, password: String, passwordEncryption: PasswordEncryption) : this(
+    constructor(uuid: String, currentPassword: String, password: String, passwordEncryption: PasswordEncryption) : this(
         UserId.fromString(uuid),
+        currentPassword,
         HashedPassword.encode(password, passwordEncryption)
     )
 }

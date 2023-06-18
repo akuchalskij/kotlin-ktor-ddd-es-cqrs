@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-data class UserId(private val value: String) {
+data class UserId internal constructor(private val value: String) {
 
     override fun toString(): String {
         return value

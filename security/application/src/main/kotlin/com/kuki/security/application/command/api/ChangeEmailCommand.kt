@@ -6,7 +6,12 @@ import com.kuki.security.domain.valueobject.UserId
 
 data class ChangeEmailCommand(
     val userId: UserId,
+    val currentPassword: String,
     val email: Email,
 ) : Command {
-    constructor(userId: String, email: String) : this(UserId.fromString(userId), Email.fromString(email))
+    constructor(userId: String, currentPassword: String, email: String) : this(
+        UserId.fromString(userId),
+        currentPassword,
+        Email.fromString(email)
+    )
 }

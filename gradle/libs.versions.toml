@@ -11,6 +11,8 @@ h2-version = "2.1.214"
 exposed-version = "0.41.1"
 auth0-jwt-version = "4.4.0"
 kotlin-datetime-version = "0.4.0"
+kmongo-version = "4.9.0"
+kreds-version = "0.8.0"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
@@ -32,21 +34,31 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", v
 ktor-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor-version" }
 
 micrometer-registry = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus-version" }
+
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed-version" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed-version" }
 exposed-date-time = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed-version" }
+
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql-version" }
 h2 = { module = "com.h2database:h2", version.ref = "h2-version" }
+kmongo = { module = "org.litote.kmongo:kmongo-coroutine", version.ref = "kmongo-version" }
+kmongo-serialization = { module = "org.litote.kmongo:kmongo-coroutine-serialization", version.ref = "kmongo-version" }
+
+kreds = { module = "io.github.crackthecodeabhi:kreds", version.ref = "kreds-version" }
+
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback-version" }
+
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-version" }
 kotlin-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime-version" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-version" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines-version" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-version" }
+
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin-version" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin-version" }
 koin-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin-version" }
+
 auth0-jwt = { module = "com.auth0:java-jwt", version.ref = "auth0-jwt-version" }
 
 [bundles]
@@ -55,6 +67,7 @@ ktor-server-auth = ["ktor-server-auth", "ktor-server-auth-jwt"]
 ktor-client = ["ktor-client-core", "ktor-client-apache"]
 exposed = ["exposed-core", "exposed-jdbc", "exposed-date-time"]
 koin = ["koin-core", "koin-ktor", "koin-logger"]
+kmongo = ["kmongo", "kmongo-serialization"]
 
 [plugins]
 ktor = { id = "io.ktor.plugin", version = "2.3.0" }
