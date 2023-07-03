@@ -19,7 +19,7 @@ class SignInCommandHandler(
 
         val user = userRepository.findById(userId)
 
-        user.signIn(command.password, passwordEncryption)
+        user.signIn(command.email, command.password, passwordEncryption)
 
         userRepository.store(user)
     }

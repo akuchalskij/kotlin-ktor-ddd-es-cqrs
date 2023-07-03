@@ -10,6 +10,7 @@ import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.coroutine.commitTransactionAndAwait
 import org.litote.kmongo.eq
 
+@Suppress("unused")
 class MongoUserViewRepository(
     private val database: String,
     private val client: CoroutineClient
@@ -36,10 +37,12 @@ class MongoUserViewRepository(
                         email = data.email,
                         password = data.password,
                         isEmailVerified = data.isEmailVerified,
-                        firstName = data.firstName,
-                        lastName = data.lastName,
+                        givenName = data.givenName,
+                        middleName = data.middleName,
+                        surname = data.surname,
                         createdAt = data.createdAt,
-                        updatedAt = data.updatedAt
+                        updatedAt = data.updatedAt,
+                        deletedAt = data.deletedAt
                     )
                 )
         }
@@ -70,10 +73,12 @@ class MongoUserViewRepository(
         email,
         password,
         isEmailVerified,
-        firstName,
-        lastName,
+        givenName,
+        middleName,
+        surname,
         createdAt,
         updatedAt,
+        deletedAt,
     )
 
     private suspend fun CoroutineClient.transaction(block: suspend () -> Unit) {

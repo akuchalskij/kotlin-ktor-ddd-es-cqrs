@@ -7,8 +7,10 @@ data class UserView(
     val email: String,
     val password: String,
     val isEmailVerified: Boolean,
-    val firstName: String?,
-    val lastName: String?,
+    val givenName: String?,
+    val middleName: String?,
+    val surname: String?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime?,
+    val deletedAt: LocalDateTime?,
 )

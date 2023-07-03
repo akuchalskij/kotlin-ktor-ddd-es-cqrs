@@ -22,23 +22,34 @@ class User : AggregateRoot() {
     @AggregateId
     private lateinit var id: UserId
 
-    private lateinit var email: Email
+    lateinit var email: Email
+        private set
 
-    private lateinit var password: HashedPassword
+    lateinit var password: HashedPassword
+        private set
 
-    private var isEmailVerified: Boolean = false
+    var isEmailVerified: Boolean = false
+        private set
 
-    private var personalName: PersonalName? = null
+    var personalName: PersonalName? = null
+        private set
 
-    private var createdAt: Instant? = null
+    var createdAt: Instant? = null
+        private set
 
-    private var updatedAt: Instant? = null
+    var updatedAt: Instant? = null
+        private set
 
-    private var deletedAt: Instant? = null
+    var deletedAt: Instant? = null
+        private set
 
-    fun signIn(plainPassword: String, passwordEncryption: PasswordEncryption) {
+    fun signIn(email: Email, plainPassword: String, passwordEncryption: PasswordEncryption) {
         check(deletedAt == null) {
             "User is deleted"
+        }
+
+        require(this.email == email) {
+            "Email should be same as user's email"
         }
 
         if (password.isMatch(plainPassword, passwordEncryption)) {
@@ -95,7 +106,9 @@ class User : AggregateRoot() {
             "New email should be different"
         }
 
-        uniqueEmailSpecification.isUnique(email.toString())
+        check(uniqueEmailSpecification.isUnique(email.toString())) {
+            "Email $email is already taken"
+        }
 
         apply(UserEmailChanged(userId = id, email = email, updatedAt = Clock.System.now()))
     }
@@ -156,7 +169,7 @@ class User : AggregateRoot() {
     }
 
     fun delete() {
-        check(deletedAt != null) {
+        check(deletedAt == null) {
             "User is already deleted"
         }
 
@@ -219,7 +232,9 @@ class User : AggregateRoot() {
                 this.id = id
             }
 
-            uniqueEmailSpecification.isUnique(email.toString())
+            check(uniqueEmailSpecification.isUnique(email.toString())) {
+                "Email $email is already taken"
+            }
 
             user.apply(UserCreated(id = id, email = email, password = password, createdAt = Clock.System.now()))
 

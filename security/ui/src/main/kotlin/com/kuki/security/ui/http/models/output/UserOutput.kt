@@ -24,8 +24,8 @@ fun UserView.serialize() = UserOutput(
     id,
     email,
     isEmailVerified,
-    firstName,
-    lastName,
+    givenName,
+    middleName,
     createdAt.toString(),
     updatedAt.toString()
 )

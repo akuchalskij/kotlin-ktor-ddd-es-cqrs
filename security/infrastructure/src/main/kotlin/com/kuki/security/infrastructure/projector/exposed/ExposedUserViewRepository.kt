@@ -36,10 +36,12 @@ class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface 
                 row[email] = data.email
                 row[password] = data.password
                 row[isEmailVerified] = data.isEmailVerified
-                row[firstName] = data.firstName
-                row[lastName] = data.lastName
+                row[givenName] = data.givenName
+                row[middleName] = data.middleName
+                row[surname] = surname
                 row[createdAt] = data.createdAt
                 row[updatedAt] = data.updatedAt
+                row[deletedAt] = data.deletedAt
             }
         }
     }
@@ -66,9 +68,11 @@ class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface 
         this[UsersTable.email],
         this[UsersTable.password],
         this[UsersTable.isEmailVerified],
-        this[UsersTable.firstName],
-        this[UsersTable.lastName],
+        this[UsersTable.givenName],
+        this[UsersTable.middleName],
+        this[UsersTable.surname],
         this[UsersTable.createdAt],
         this[UsersTable.updatedAt],
+        this[UsersTable.deletedAt],
     )
 }
