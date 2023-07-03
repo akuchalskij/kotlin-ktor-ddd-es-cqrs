@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.datetime)
-    implementation(libs.kreds)
 
     implementation(libs.koin.core)
 

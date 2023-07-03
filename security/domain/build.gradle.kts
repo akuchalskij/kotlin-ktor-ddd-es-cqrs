@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.kotlin.datetime)
 
     testImplementation(libs.kotlin.junit)
+    testImplementation(libs.kotlin.coroutines.test)
 }
 
 fun <T : KotlinJvmOptions> KotlinCompile<T>.applyKotlinJvmOptions() {
