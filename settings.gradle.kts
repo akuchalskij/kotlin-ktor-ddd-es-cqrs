@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "security"
+rootProject.name = "devview"
 
 include(":framework")
 include(":shared")

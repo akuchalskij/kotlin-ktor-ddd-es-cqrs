@@ -2,6 +2,9 @@ package com.kuki.framework.commandhandling
 
 import com.kuki.framework.reflect.genericType
 import java.util.*
+import kotlin.collections.HashMap
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.starProjectedType
 
 /**
@@ -13,7 +16,7 @@ import kotlin.reflect.full.starProjectedType
  */
 class SimpleCommandBus : CommandBus {
 
-    private val commandHandlers: MutableList<CommandHandler<Command>> = mutableListOf()
+    private val commandHandlers: HashMap<KType, CommandHandler<Command>> = hashMapOf()
     private val commandQueue: Queue<Command> = LinkedList()
     private var isDispatching: Boolean = false
 
@@ -25,7 +28,7 @@ class SimpleCommandBus : CommandBus {
      * @see CommandHandler
      */
     override fun subscribe(listener: CommandHandler<Command>) {
-        commandHandlers.add(listener)
+        commandHandlers[listener::class.genericType()] = listener
     }
 
     /**
@@ -43,13 +46,7 @@ class SimpleCommandBus : CommandBus {
             try {
                 while (commandQueue.any { it == command }) {
                     commandQueue.remove(command)
-                    commandHandlers
-                        .filter { listener ->
-                            listener::class.genericType() == command::class.starProjectedType
-                        }
-                        .forEach { listener ->
-                            listener.execute(command)
-                        }
+                    commandHandlers[command::class.starProjectedType]?.execute(command)
                 }
             } finally {
                 isDispatching = false

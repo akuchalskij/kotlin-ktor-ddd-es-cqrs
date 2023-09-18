@@ -8,5 +8,5 @@ class UniqueEmailSpecification(
     private val checkUserByEmailInterface: CheckUserByEmailInterface,
 ) : UniqueEmailSpecificationInterface {
     override suspend fun isUnique(email: String): Boolean =
-        checkUserByEmailInterface.existsByEmail(Email.fromString(email)) != null
+        checkUserByEmailInterface.existsByEmail(Email.fromString(email)) == null
 }

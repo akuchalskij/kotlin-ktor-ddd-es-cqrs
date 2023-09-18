@@ -6,20 +6,24 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
-fun <T : Table> T.insertOrUpdate(key: Column<*>, body: T.(InsertStatement<Number>) -> Unit) =
-    InsertOrUpdate<Number>(key, this).apply {
+fun <T : Table> T.upsert(
+    vararg keys: Column<*> = (primaryKey ?: throw IllegalArgumentException("primary key is missing")).columns,
+    body: T.(InsertStatement<Number>) -> Unit
+) =
+    InsertOrUpdate<Number>(this, keys = keys).apply {
         body(this)
         execute(TransactionManager.current())
     }
 
 class InsertOrUpdate<Key : Any>(
-    private val key: Column<*>,
     table: Table,
-    isIgnore: Boolean = false
+    isIgnore: Boolean = false,
+    private vararg val keys: Column<*>
 ) : InsertStatement<Key>(table, isIgnore) {
-    override fun prepareSQL(transaction: Transaction): String {
-        val updateSetter = table.columns.joinToString { "${it.name} = EXCLUDED.${it.name}" }
-        val onConflict = "ON CONFLICT (${key.name}) DO UPDATE SET $updateSetter"
-        return "${super.prepareSQL(transaction)} $onConflict"
+    override fun prepareSQL(transaction: Transaction, prepared: Boolean): String {
+        val tm = TransactionManager.current()
+        val updateSetter = (table.columns - keys).joinToString { "${tm.identity(it)} = EXCLUDED.${tm.identity(it)}" }
+        val onConflict = "ON CONFLICT (${keys.joinToString { tm.identity(it) }}) DO UPDATE SET $updateSetter"
+        return "${super.prepareSQL(transaction, prepared)} $onConflict"
     }
 }

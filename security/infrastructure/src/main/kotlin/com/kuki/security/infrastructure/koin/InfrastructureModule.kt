@@ -16,6 +16,7 @@ import com.kuki.security.domain.repository.CheckUserByEmailInterface
 import com.kuki.security.domain.repository.UserRepositoryInterface
 import com.kuki.security.domain.service.crypto.OTP
 import com.kuki.security.domain.service.crypto.PasswordEncryption
+import com.kuki.security.domain.service.crypto.PayloadClaimParser
 import com.kuki.security.domain.service.sender.ActivationTokenSender
 import com.kuki.security.domain.service.sender.ResetPasswordConfirmationSender
 import com.kuki.security.domain.specification.UniqueEmailSpecificationInterface
@@ -23,9 +24,10 @@ import com.kuki.security.infrastructure.projector.UserProjector
 import com.kuki.security.infrastructure.projector.UserViewRepository
 import com.kuki.security.infrastructure.projector.exposed.ExposedUserViewRepository
 import com.kuki.security.infrastructure.repository.UserEventStore
-import com.kuki.security.infrastructure.service.crypto.InMemoryOTPStorage
+import com.kuki.security.infrastructure.service.cache.CacheInterface
+import com.kuki.security.infrastructure.service.cache.InMemoryCache
+import com.kuki.security.infrastructure.service.crypto.JsonNodePayloadClaimParser
 import com.kuki.security.infrastructure.service.crypto.OTPImpl
-import com.kuki.security.infrastructure.service.crypto.OTPStorage
 import com.kuki.security.infrastructure.service.crypto.PBKDF2PasswordEncryption
 import com.kuki.security.infrastructure.service.sender.ActivationTokenConsoleSender
 import com.kuki.security.infrastructure.service.sender.ResetPasswordConfirmationConsoleSender
@@ -89,13 +91,15 @@ val infrastructureModule = module {
 
     single<PasswordEncryption> { PBKDF2PasswordEncryption }
 
+    single<PayloadClaimParser> { JsonNodePayloadClaimParser() }
+
     single { UserEventStore(eventBus = get(), eventStore = get()) } bind UserRepositoryInterface::class
 
     single<UniqueEmailSpecificationInterface> { UniqueEmailSpecification(checkUserByEmailInterface = get()) }
 
-    single { InMemoryOTPStorage() } bind OTPStorage::class
+    single { InMemoryCache() } bind CacheInterface::class
 
-    single<OTP> { OTPImpl(storage = get()) }
+    single<OTP> { OTPImpl(cache = get()) }
 
     single<ActivationTokenSender> { ActivationTokenConsoleSender() }
     single<ResetPasswordConfirmationSender> { ResetPasswordConfirmationConsoleSender() }

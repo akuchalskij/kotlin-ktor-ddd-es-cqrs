@@ -34,6 +34,7 @@ dependencies {
 
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.kmongo)
+    implementation(libs.kreds)
 
     implementation(libs.logback)
 

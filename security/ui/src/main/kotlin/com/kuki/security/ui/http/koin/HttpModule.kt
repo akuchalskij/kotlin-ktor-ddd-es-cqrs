@@ -1,7 +1,7 @@
 package com.kuki.security.ui.http.koin
 
-import com.kuki.security.domain.service.crypto.TokenGenerator
-import com.kuki.security.infrastructure.service.crypto.JWTTokenGenerator
+import com.kuki.security.domain.service.crypto.TokenBackend
+import com.kuki.security.infrastructure.service.crypto.JWTTokenBackend
 import io.ktor.server.application.*
 import kotlinx.coroutines.CoroutineScope
 import org.koin.dsl.module
@@ -11,11 +11,12 @@ fun httpModule(application: Application) = module {
         CoroutineScope(application.coroutineContext)
     }
 
-    single<TokenGenerator> {
-        JWTTokenGenerator(
+    single<TokenBackend> {
+        JWTTokenBackend(
             audience = application.environment.config.property("jwt.audience").getString(),
             issuer = application.environment.config.property("jwt.issuer").getString(),
-            secret = application.environment.config.property("jwt.secret").getString()
+            secret = application.environment.config.property("jwt.secret").getString(),
+            payloadClaimParser = get(),
         )
     }
 }

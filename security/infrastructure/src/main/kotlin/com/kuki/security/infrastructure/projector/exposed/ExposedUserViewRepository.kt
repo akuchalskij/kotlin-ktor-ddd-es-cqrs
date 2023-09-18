@@ -6,11 +6,11 @@ import com.kuki.security.domain.valueobject.Email
 import com.kuki.security.domain.valueobject.UserId
 import com.kuki.security.infrastructure.projector.UserView
 import com.kuki.security.infrastructure.projector.UserViewRepository
-import com.kuki.shared.infrastructure.util.exposed.insertOrUpdate
 import com.kuki.shared.infrastructure.util.exposed.transaction
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.upsert
 
 class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface {
 
@@ -31,14 +31,14 @@ class ExposedUserViewRepository : UserViewRepository, CheckUserByEmailInterface 
 
     override suspend fun save(data: UserView) {
         transaction {
-            UsersTable.insertOrUpdate(UsersTable.id) { row ->
+            UsersTable.upsert(UsersTable.id) { row ->
                 row[id] = data.id
                 row[email] = data.email
                 row[password] = data.password
                 row[isEmailVerified] = data.isEmailVerified
                 row[givenName] = data.givenName
                 row[middleName] = data.middleName
-                row[surname] = surname
+                row[surname] = data.surname
                 row[createdAt] = data.createdAt
                 row[updatedAt] = data.updatedAt
                 row[deletedAt] = data.deletedAt

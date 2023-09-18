@@ -13,7 +13,5 @@ fun Application.configureDatabases() {
         password = this@configureDatabases.environment.config.property("db.password").getString(),
     )
 
-    DatabaseFactory.init(
-        config, DomainMessagesTable, UsersTable,
-    )
+    DatabaseFactory.init(config, DomainMessagesTable, UsersTable,)
 }

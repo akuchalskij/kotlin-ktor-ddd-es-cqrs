@@ -2,23 +2,28 @@ package com.kuki.security.infrastructure.service.crypto
 
 import com.kuki.security.domain.service.crypto.OTP
 import com.kuki.security.domain.valueobject.UserId
+import com.kuki.security.infrastructure.service.cache.CacheInterface
 import kotlin.random.Random
 
-class OTPImpl(
-    private val storage: OTPStorage<UserId, String>
-) : OTP {
+class OTPImpl(private val cache: CacheInterface) : OTP {
     override suspend fun generate(userId: UserId): String {
         val token = generateOTP()
 
-        storage.set(userId, token)
+        cache.set("$userId$CACHE_PREFIX", token)
 
         return token
     }
 
     override suspend fun verify(userId: UserId, otp: String): Boolean {
-        val token = storage.get(userId) ?: return false
+        val token = cache.get<String>("$userId$CACHE_PREFIX")
 
-        return token.isNotEmpty()
+        token?.let {
+            cache.remove("$userId$CACHE_PREFIX")
+
+            return token == otp
+        }
+
+        return false
     }
 
     private fun generateOTP(): String {
@@ -35,5 +40,6 @@ class OTPImpl(
     companion object {
         const val OTP_LENGTH = 6
         const val NUMBERS = "1234567890"
+        const val CACHE_PREFIX = "_otp"
     }
 }

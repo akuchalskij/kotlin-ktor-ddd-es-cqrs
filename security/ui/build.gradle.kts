@@ -63,7 +63,6 @@ dependencies {
 
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.junit)
-    testImplementation("io.ktor:ktor-server-test-host-jvm:2.3.0")
 }
 
 tasks.compileKotlin {

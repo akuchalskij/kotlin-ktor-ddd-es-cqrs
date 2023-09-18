@@ -3,9 +3,7 @@ package com.kuki.security.application.koin
 import com.kuki.framework.commandhandling.CommandHandler
 import com.kuki.framework.queryhandling.QueryHandler
 import com.kuki.security.application.command.handler.*
-import com.kuki.security.application.query.handler.FindAllUsersHandler
-import com.kuki.security.application.query.handler.FindUserByIdHandler
-import com.kuki.security.application.query.handler.GetTokenHandler
+import com.kuki.security.application.query.handler.*
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -91,6 +89,14 @@ val applicationModule = module {
     } bind QueryHandler::class
 
     single {
-        GetTokenHandler(userViewRepository = get(), tokenGenerator = get())
+        GetTokenHandler(userViewRepository = get(), tokenBackend = get())
+    } bind QueryHandler::class
+
+    single {
+        GetNewAccessTokenHandler(tokenBackend = get())
+    } bind QueryHandler::class
+
+    single {
+        GetVerifiedTokenHandler(tokenBackend = get())
     } bind QueryHandler::class
 }

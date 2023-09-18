@@ -9,7 +9,7 @@ import com.kuki.security.infrastructure.projector.UserViewRepository
 
 class InMemoryUserViewRepository : UserViewRepository, CheckUserByEmailInterface {
 
-    private val table: MutableMap<String, UserView> = mutableMapOf()
+    private val table: HashMap<String, UserView> = hashMapOf()
 
     override suspend fun existsByEmail(email: Email): UserId? {
         return table.values

@@ -17,10 +17,10 @@ import com.kuki.security.domain.valueobject.UserId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
-class User : AggregateRoot() {
+class User() : AggregateRoot() {
 
     @AggregateId
-    private lateinit var id: UserId
+    lateinit var id: UserId
 
     lateinit var email: Email
         private set
@@ -227,10 +227,7 @@ class User : AggregateRoot() {
             password: HashedPassword,
             uniqueEmailSpecification: UniqueEmailSpecificationInterface,
         ): User {
-            // TODO: Create a factory for aggregate
-            val user = User().apply {
-                this.id = id
-            }
+            val user = User().apply { this.id = id }
 
             check(uniqueEmailSpecification.isUnique(email.toString())) {
                 "Email $email is already taken"

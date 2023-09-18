@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":framework"))
     implementation(project(":security:domain"))
     implementation(project(":security:infrastructure"))
+    implementation(libs.kotlin.datetime)
 
     implementation(libs.logback)
 
